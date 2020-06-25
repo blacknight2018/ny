@@ -39,12 +39,17 @@ func Register(engine *gin.Engine) {
 			dormId := gjson.Get(data, "dorm_id").Int()
 			stuNumber := gjson.Get(data, "stu_number").String()
 			stuMobile := gjson.Get(data, "mobile").String()
+			room := gjson.Get(data, "room").String()
 			saveMobile(openId, stuMobile)
 			if ok, userId := getIdByOpenId(openId); ok {
-				stu.SaveDorm(userId, int(dormId))
-				stu.SaveStuNumber(userId, stuNumber)
-				gerr.SetResponse(context, gerr.Ok, nil)
-				return
+				ok := stu.SaveDorm(userId, int(dormId))
+				ok2 := stu.SaveStuNumber(userId, stuNumber)
+				ok3 := stu.SaveRoom(userId, room)
+				if ok && ok2 && ok3 {
+					gerr.SetResponse(context, gerr.Ok, nil)
+					return
+				}
+
 			}
 
 		}

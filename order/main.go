@@ -48,8 +48,8 @@ func Register(engine *gin.Engine) {
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)
 	})
-	g.GET("list", func(context *gin.Context) {
-		schoolId := context.Query("school_id")
+	g.GET("/:school_id", func(context *gin.Context) {
+		schoolId := context.Param("school_id")
 		schoolIdInt, err := strconv.Atoi(schoolId)
 		if err == nil {
 			if ok, data := getOrderListBySchoolId(schoolIdInt); ok {
@@ -59,6 +59,20 @@ func Register(engine *gin.Engine) {
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)
 	})
+	g.GET("/:school_id/:dorm_id", func(context *gin.Context) {
+		schoolId := context.Param("school_id")
+		schoolIdInt, err := strconv.Atoi(schoolId)
+		dormId := context.Param("dorm_id")
+		dormIdInt, err2 := strconv.Atoi(dormId)
+		if err == nil && err2 == nil {
+			fmt.Println(schoolIdInt, dormIdInt)
+			return
+		}
+		gerr.SetResponse(context, gerr.UnKnow, nil)
+	})
+	//g.GET("/:school_id/", func(context *gin.Context) {
+	//
+	//})
 }
 
 func Test() {

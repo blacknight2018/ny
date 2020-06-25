@@ -39,6 +39,14 @@ func SaveDorm(userId int, dormId int) bool {
 	return r && s.update()
 }
 
+func SaveRoom(userId int, room string) bool {
+	var s stu
+	s.UserId = userId
+	r := s.queryByUserId()
+	s.DormRoom = room
+	return r && s.update()
+}
+
 func AddStu(userId int) (bool, int) {
 	var s stu
 	var ok1 bool

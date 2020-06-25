@@ -27,8 +27,8 @@ func GetFirstDormId() (bool, int) {
 
 func Register(engine *gin.Engine) {
 	g := engine.Group("dorm")
-	g.GET("list", func(context *gin.Context) {
-		schoolId := context.Query("school_id")
+	g.GET("/:school_id", func(context *gin.Context) {
+		schoolId := context.Param("school_id")
 		schoolIdInt, err := strconv.Atoi(schoolId)
 		if err != nil {
 			gerr.SetResponse(context, gerr.UnKnow, nil)
