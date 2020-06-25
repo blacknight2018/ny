@@ -5,10 +5,17 @@ import (
 	"ny/dorm"
 )
 
-func GetStuDormId(userId int) int {
+func GetStuDormIdByUserId(userId int) int {
 	var s stu
 	s.UserId = userId
 	s.queryByUserId()
+	return s.DormId
+}
+
+func GetStuDormIdById(id int) int {
+	var s stu
+	s.Id = id
+	s.queryById()
 	return s.DormId
 }
 
@@ -60,7 +67,7 @@ func QueryStuIdByUserId(userId int) int {
 func QueryStuExitsById(id int) bool {
 	var s stu
 	s.Id = id
-	return s.queryByFirstId()
+	return s.queryById()
 }
 
 func Test() {

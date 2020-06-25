@@ -16,3 +16,14 @@ func getDormList(schoolId int) (bool, string) {
 	}
 	return false, utils.EmptyString
 }
+
+func getDormIdList(schoolId int) []int {
+	var idList []int
+	ok, r := QueryDormList(schoolId)
+	if ok {
+		for _, v := range r {
+			idList = append(idList, v.Id)
+		}
+	}
+	return idList
+}

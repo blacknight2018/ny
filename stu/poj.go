@@ -29,7 +29,7 @@ func (s *stu) queryByUserId() bool {
 
 //
 
-func (s *stu) queryByFirstId() bool {
+func (s *stu) queryById() bool {
 	err := db.GetDB().Model(s).Where("id = ?", s.Id).First(s).Error
 	return err == nil
 }

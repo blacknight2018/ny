@@ -12,7 +12,8 @@ type order struct {
 	FinishTime *time.Time `json:"finish_time";gorm:"column:finish_time;"`
 	Type       string     `json:"type";gorm:"column:type;type:enum('2','1','0')"`
 	Comment    string     `json:"comment";gorm:"column:comment;"`
-	RecvStu    int        `json:"recv_stu";gorm:"column:recv_stu;"`
+	RecvStu    *int       `json:"recv_stu";gorm:"column:recv_stu;"`
+	SchoolId   int        `json:"school_id";gorm:"column:school_id;"`
 }
 
 func (o *order) TableName() string {

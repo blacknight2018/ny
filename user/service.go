@@ -79,7 +79,7 @@ func getPersonalInfo(openId string) (bool, string) {
 		return false, utils.EmptyString
 	}
 
-	personInfo.DormId = stu.GetStuDormId(u.Id)
+	personInfo.DormId = stu.GetStuDormIdByUserId(u.Id)
 	personInfo.SchoolId = dorm.GetSchoolId(personInfo.DormId)
 	personInfo.StuNumber = stu.GetStuNumber(u.Id)
 	personInfo.Mobile = u.Mobile

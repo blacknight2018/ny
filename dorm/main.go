@@ -20,6 +20,10 @@ func GetSchoolId(dormId int) int {
 	return d.SchoolId
 }
 
+func GetDormIdListBySchoolId(schoolId int) []int {
+	return getDormIdList(schoolId)
+}
+
 func GetFirstDormId() int {
 	var d dorm
 	d.QueryFirst()
