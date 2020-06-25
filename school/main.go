@@ -8,7 +8,7 @@ import (
 func Register(engine *gin.Engine) {
 	g := engine.Group("school")
 	g.GET("list", func(context *gin.Context) {
-		if ok, data := querySchoolList(); ok {
+		if ok, data := getSchoolList(); ok {
 			gerr.SetResponse(context, gerr.Ok, &data)
 			return
 		}

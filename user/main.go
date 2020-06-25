@@ -26,7 +26,7 @@ func Register(engine *gin.Engine) {
 		if ok, data := utils.GetRawData(context); ok {
 			openId := gjson.Get(data, "open_id").String()
 			nickName := gjson.Get(data, "nick_name").String()
-			insertUser(openId, nickName)
+			addUser(openId, nickName)
 			gerr.SetResponse(context, gerr.Ok, nil)
 			return
 		}

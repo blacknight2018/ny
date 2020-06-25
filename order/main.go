@@ -7,6 +7,7 @@ import (
 	"ny/gerr"
 	"ny/stu"
 	"ny/utils"
+	"strconv"
 	"time"
 )
 
@@ -22,14 +23,14 @@ func Register(engine *gin.Engine) {
 		if ok, data := utils.GetRawData(context); ok {
 			orderType := gjson.Get(data, "type").Int()
 
-			if orderType < 0 || orderType > Buy {
+			if orderType < Delivery || orderType > Buy {
 				gerr.SetResponse(context, gerr.ParamError, nil)
 				return
 			}
 
 			stuId := gjson.Get(data, "stu_id").Int()
 
-			if stu.QueryStuExitsById(int(stuId)) == false {
+			if stu.GetStuExitsById(int(stuId)) == false {
 				gerr.SetResponse(context, gerr.UnKnowUser, nil)
 				return
 			}
@@ -44,6 +45,17 @@ func Register(engine *gin.Engine) {
 				return
 			}
 
+		}
+		gerr.SetResponse(context, gerr.UnKnow, nil)
+	})
+	g.GET("list", func(context *gin.Context) {
+		schoolId := context.Query("school_id")
+		schoolIdInt, err := strconv.Atoi(schoolId)
+		if err == nil {
+			if ok, data := getOrderListBySchoolId(schoolIdInt); ok {
+				gerr.SetResponse(context, gerr.Ok, &data)
+				return
+			}
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)
 	})

@@ -5,7 +5,7 @@ import (
 	"ny/utils"
 )
 
-func querySchoolList() (bool, string) {
+func getSchoolList() (bool, string) {
 	ok, r := querySchool()
 	bytes, err := json.Marshal(r)
 	if !ok || err != nil {

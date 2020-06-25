@@ -29,26 +29,26 @@ func code2Session(code string) (bool, string) {
 	return utils.SendGet("https://api.weixin.qq.com/sns/jscode2session", params)
 }
 
-func queryUserExits(openId string) bool {
+func getUserExits(openId string) bool {
 	var u user
 	u.OpenId = openId
 	r := u.queryByOpenId()
 	return r
 }
 
-func insertUser(openId string, nickName string) bool {
+func addUser(openId string, nickName string) bool {
 	var u user
 	u.OpenId = openId
 	u.NickName = nickName
-	if queryUserExits(openId) == false {
+	if getUserExits(openId) == false {
 		err1 := u.insert()
 		if err1 == false {
 			return false
 		}
 	}
 
-	if u.queryByOpenId() && stu.QueryStuExitsByUserId(u.Id) == false {
-		err, _ := stu.InsertStu(u.Id)
+	if u.queryByOpenId() && stu.GetStuExitsByUserId(u.Id) == false {
+		err, _ := stu.AddStu(u.Id)
 		if err == false {
 			return false
 		}
@@ -83,7 +83,7 @@ func getPersonalInfo(openId string) (bool, string) {
 	personInfo.SchoolId = dorm.GetSchoolId(personInfo.DormId)
 	personInfo.StuNumber = stu.GetStuNumber(u.Id)
 	personInfo.Mobile = u.Mobile
-	personInfo.StuId = stu.QueryStuIdByUserId(u.Id)
+	personInfo.StuId = stu.GetStuIdByUserId(u.Id)
 	bytes, err := json.Marshal(personInfo)
 	if err != nil {
 		return false, utils.EmptyString
