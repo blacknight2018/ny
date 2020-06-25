@@ -2,9 +2,13 @@ package user
 
 import (
 	"encoding/json"
+	"github.com/tidwall/gjson"
+	"io/ioutil"
+	"net/http"
 	"ny/dorm"
 	"ny/stu"
 	"ny/utils"
+	"strings"
 )
 
 //服务层 给展示层提供服务返回json的接口
@@ -28,6 +32,61 @@ func code2Session(code string) (bool, string) {
 	params["js_code"] = code
 	params["grant_type"] = code
 	return utils.SendGet("https://api.weixin.qq.com/sns/jscode2session", params)
+}
+
+func getAccessToken() (bool, string) {
+	var param = make(map[string]string)
+	param["grant_type"] = "client_credential"
+	param["appid"] = AppId
+	param["secret"] = AppSecret
+	r, data := utils.SendGet("https://api.weixin.qq.com/cgi-bin/token", param)
+	if r {
+		return true, gjson.Get(data, "access_token").String()
+	}
+	return false, utils.EmptyString
+}
+
+func sendNotify(openId string, templateId string, data map[string]interface{}) bool {
+	//UserLogger.InfoLog("sendNotify():" + openId)
+	ok, accessToken := getAccessToken()
+	if !ok {
+		return false
+	}
+	reqUrl := "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + accessToken
+
+	var param = make(map[string]interface{})
+	param["access_token"] = accessToken
+	param["touser"] = openId
+	param["template_id"] = templateId //"mtm0AlM9wiWsYdE-ihi8lpiioqFi6EtQeusYaY7UrRk"
+
+	//消息参数
+	type dataValue struct {
+		Value interface{} `json:"value"`
+	}
+	for k, v := range data {
+		data[k] = dataValue{v}
+	}
+	param["data"] = data
+
+	reqJsonBytes, _ := json.Marshal(param)
+	reqJsonString := string(reqJsonBytes)
+
+	req, err1 := http.NewRequest("POST", reqUrl, strings.NewReader(reqJsonString))
+	resp, err2 := http.DefaultClient.Do(req)
+	if err1 != nil || err2 != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	respData, err3 := ioutil.ReadAll(resp.Body)
+	if err3 != nil {
+		return false
+	}
+	respDataString := string(respData)
+	errCode := int(gjson.Get(respDataString, "errcode").Num)
+	if errCode != 0 {
+		return false
+	}
+	return true
 }
 
 func getUserExits(openId string) bool {
@@ -58,11 +117,26 @@ func addUser(openId string, nickName string, avatarUrl string) bool {
 	return u.update()
 
 }
+
+func getAvatarUrlByOpenId(openId string) (bool, string) {
+	var u user
+	u.OpenId = openId
+	r := u.queryByOpenId()
+	return r, u.AvatarUrl
+}
+
 func getIdByOpenId(openId string) (bool, int) {
 	var u user
 	u.OpenId = openId
 	r := u.queryByOpenId()
 	return r, u.Id
+}
+
+func getOpenIdById(userId int) (bool, string) {
+	var u user
+	u.Id = userId
+	r := u.queryById()
+	return r, u.OpenId
 }
 
 func saveMobile(openId string, mobile string) bool {

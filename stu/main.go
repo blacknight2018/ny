@@ -11,6 +11,13 @@ func GetStuDormIdByUserId(userId int) (bool, int) {
 	return s.queryByUserId(), s.DormId
 }
 
+func GetUserIdByStuId(stuId int) (bool, int) {
+	var s stu
+	s.Id = stuId
+	r := s.queryById()
+	return r, s.UserId
+}
+
 func GetStuDormIdById(id int) (bool, int) {
 	var s stu
 	s.Id = id

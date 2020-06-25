@@ -15,6 +15,8 @@ type order struct {
 	RecvStu    *int       `json:"recv_stu,omitempty";gorm:"column:recv_stu;"`
 	SchoolId   int        `json:"school_id";gorm:"column:school_id;NOT NULL;"`
 	DormId     int        `json:"dorm_id";gorm:"column:dorm_id;NOT NULL;"`
+	AvatarUrl  string     `json:"avatar_url";gorm:"column:avatar_url;NOT NULL;"`
+	TemplateId string     `json:"template_id";gorm:"column:template_id;NOT NULL;"`
 }
 
 func (o *order) TableName() string {
@@ -30,6 +32,17 @@ func (o *order) update() bool {
 func (o *order) insert() bool {
 	err := db.GetDB().Model(o).Create(&o).Error
 	return err == nil
+}
+
+func (o *order) queryById() bool {
+	err := db.GetDB().Model(o).Where("id = ?", o.Id).First(&o).Error
+	return err == nil
+}
+
+func queryListBySchoolIdDormId(schoolId int, dormId int) (bool, []order) {
+	var os []order
+	err := db.GetDB().Model(os).Where("school_id = ? && dorm_id = ?", schoolId, dormId).Find(&os).Error
+	return err == nil, os
 }
 
 func queryListBySchoolId(schoolId int) (bool, []order) {

@@ -6,11 +6,11 @@ import (
 	"strconv"
 )
 
-func GetDormName(dormId int) string {
+func GetDormName(dormId int) (bool, string) {
 	var d dorm
 	d.Id = dormId
-	d.QueryById()
-	return d.DormName
+	r := d.QueryById()
+	return r, d.DormName
 }
 
 func GetSchoolId(dormId int) (bool, int) {

@@ -38,9 +38,10 @@ func Register(engine *gin.Engine) {
 			orderPrice := gjson.Get(data, "price").String()
 			orderEndTime := gjson.Get(data, "end_time").Int()
 			orderComment := gjson.Get(data, "comment").String()
+			orderTemplateId := gjson.Get(data, "template_id").String()
 			fmt.Println(orderType, orderPrice, orderEndTime, orderComment)
 
-			if insertOrder(int(orderType), int(stuId), orderPrice, time.Unix(orderEndTime/1000, 0), orderComment) {
+			if insertOrder(int(orderType), int(stuId), orderPrice, time.Unix(orderEndTime/1000, 0), orderComment, orderTemplateId) {
 				gerr.SetResponse(context, gerr.Ok, nil)
 				return
 			}
@@ -65,10 +66,28 @@ func Register(engine *gin.Engine) {
 		dormId := context.Param("dorm_id")
 		dormIdInt, err2 := strconv.Atoi(dormId)
 		if err == nil && err2 == nil {
-			fmt.Println(schoolIdInt, dormIdInt)
-			return
+			//fmt.Println(schoolIdInt, dormIdInt)
+			if ok, data := getOrderListBySchoolIdDormId(schoolIdInt, dormIdInt); ok {
+				gerr.SetResponse(context, gerr.Ok, &data)
+				return
+			}
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)
+	})
+	g.POST("/send", func(context *gin.Context) {
+		if ok, data := utils.GetRawData(context); ok {
+			orderId := gjson.Get(data, "order_id").Int()
+			stuId := gjson.Get(data, "stu_id").Int()
+			openId := gjson.Get(data, "open_id").String()
+			//fmt.Println(orderId, stuId)
+			if ok = finishOrder(openId, int(orderId), int(stuId)); ok {
+				gerr.SetResponse(context, gerr.Ok, nil)
+				return
+			}
+
+		}
+		gerr.SetResponse(context, gerr.UnKnow, nil)
+
 	})
 	//g.GET("/:school_id/", func(context *gin.Context) {
 	//

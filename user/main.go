@@ -6,10 +6,33 @@ import (
 	"ny/gerr"
 	"ny/stu"
 	"ny/utils"
+	"strconv"
 )
 
 // 展示层函数 只负责接受请求 调用service的接口返回json再返回到前端
 
+func GetUserAvatarUrlByOpenId(OpenId string) (bool, string) {
+	return getAvatarUrlByOpenId(OpenId)
+}
+
+func GetOpenIdByUserId(userId int) (bool, string) {
+	return getOpenIdById(userId)
+}
+
+func SendOrderNotify(openId string, templateId string, dormName string, orderId int, comment string) bool {
+	var param = make(map[string]interface{})
+	param["thing2"] = dormName
+	param["character_string3"] = strconv.Itoa(orderId)
+	param["phrase6"] = "已被配送"
+	param["thing7"] = comment
+
+	//param["thing2"] = "火龙果等"
+	//param["character_string3"] = "AC03704733587501"
+	//param["phrase6"] = "下单成功"
+	//param["thing7"] = "尊敬的客户,感谢您的支持,请放心"
+
+	return sendNotify(openId, templateId, param)
+}
 func Register(engine *gin.Engine) {
 	g := engine.Group("user")
 	g.POST("code", func(context *gin.Context) {
