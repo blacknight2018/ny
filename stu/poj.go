@@ -9,6 +9,7 @@ type stu struct {
 	DormId    int    `gorm:"column:dorm_id;"`
 	StuNumber string `gorm:"column:stu_number;"`
 	UserId    int    `gorm:"column:user_id;"`
+	DormRoom  string `gorm:"column:dorm_room;"`
 }
 
 func (s *stu) TableName() string {

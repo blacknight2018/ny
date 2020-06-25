@@ -8,10 +8,11 @@ import (
 //user
 
 type user struct {
-	Id       int    `gorm:"column:id;unique_index;PRIMARY_KEY"`
-	OpenId   string `gorm:"column:open_id;PRIMARY_KEY;"`
-	NickName string `gorm:"column:nick_name;"`
-	Mobile   string `gorm:"column:mobile;"`
+	Id        int    `gorm:"column:id;unique_index;PRIMARY_KEY"`
+	OpenId    string `gorm:"column:open_id;PRIMARY_KEY;"`
+	NickName  string `gorm:"column:nick_name;"`
+	Mobile    string `gorm:"column:mobile;"`
+	AvatarUrl string `gorm:"column:avatar_url;NOT NULL;"`
 }
 
 func (u *user) TableName() string {

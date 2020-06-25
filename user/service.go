@@ -18,6 +18,7 @@ type PersonalInfo struct {
 	StuNumber string `json:"stu_number"`
 	Mobile    string `json:"mobile"`
 	StuId     int    `json:"stu_id"`
+	Room      string `json:"room"`
 }
 
 func code2Session(code string) (bool, string) {
@@ -36,10 +37,9 @@ func getUserExits(openId string) bool {
 	return r
 }
 
-func addUser(openId string, nickName string) bool {
+func addUser(openId string, nickName string, avatarUrl string) bool {
 	var u user
 	u.OpenId = openId
-	u.NickName = nickName
 	if getUserExits(openId) == false {
 		err1 := u.insert()
 		if err1 == false {
@@ -53,22 +53,24 @@ func addUser(openId string, nickName string) bool {
 			return false
 		}
 	}
-	return true
+	u.NickName = nickName
+	u.AvatarUrl = avatarUrl
+	return u.update()
 
 }
-func getIdByOpenId(openId string) int {
+func getIdByOpenId(openId string) (bool, int) {
 	var u user
 	u.OpenId = openId
-	u.queryByOpenId()
-	return u.Id
+	r := u.queryByOpenId()
+	return r, u.Id
 }
 
 func saveMobile(openId string, mobile string) bool {
 	var u user
 	u.OpenId = openId
-	u.queryByOpenId()
+	r := u.queryByOpenId()
 	u.Mobile = mobile
-	return u.update()
+	return r && u.update()
 }
 
 func getPersonalInfo(openId string) (bool, string) {
@@ -79,14 +81,17 @@ func getPersonalInfo(openId string) (bool, string) {
 		return false, utils.EmptyString
 	}
 
-	personInfo.DormId = stu.GetStuDormIdByUserId(u.Id)
-	personInfo.SchoolId = dorm.GetSchoolId(personInfo.DormId)
-	personInfo.StuNumber = stu.GetStuNumber(u.Id)
+	var ok, ok1, ok2, ok3, ok4 bool
+	ok1, personInfo.DormId = stu.GetStuDormIdByUserId(u.Id)
+	ok, personInfo.SchoolId = dorm.GetSchoolId(personInfo.DormId)
+	ok2, personInfo.StuNumber = stu.GetStuNumber(u.Id)
 	personInfo.Mobile = u.Mobile
-	personInfo.StuId = stu.GetStuIdByUserId(u.Id)
+	ok3, personInfo.StuId = stu.GetStuIdByUserId(u.Id)
+	ok4, personInfo.Room = stu.GetStuRoomByUserId(u.Id)
+
 	bytes, err := json.Marshal(personInfo)
 	if err != nil {
 		return false, utils.EmptyString
 	}
-	return true, string(bytes)
+	return ok && ok1 && ok2 && ok3 && ok4, string(bytes)
 }

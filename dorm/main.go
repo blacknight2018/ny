@@ -13,21 +13,16 @@ func GetDormName(dormId int) string {
 	return d.DormName
 }
 
-func GetSchoolId(dormId int) int {
+func GetSchoolId(dormId int) (bool, int) {
 	var d dorm
 	d.Id = dormId
-	d.QueryById()
-	return d.SchoolId
+
+	return d.QueryById(), d.SchoolId
 }
 
-func GetDormIdListBySchoolId(schoolId int) []int {
-	return getDormIdList(schoolId)
-}
-
-func GetFirstDormId() int {
+func GetFirstDormId() (bool, int) {
 	var d dorm
-	d.QueryFirst()
-	return d.Id
+	return d.QueryFirst(), d.Id
 }
 
 func Register(engine *gin.Engine) {

@@ -20,12 +20,13 @@ func getOrderListBySchoolId(schoolId int) (bool, string) {
 
 func insertOrder(orderType int, stuId int, price string, endTime time.Time, comment string) bool {
 	var o order
+	var ok, ok2 bool
 	o.Comment = comment
 	o.FinishTime = &endTime
 	o.Type = strconv.Itoa(orderType)
 	o.Price = price
 	o.StuId = stuId
-	o.DormId = stu.GetStuDormIdById(o.StuId)
-	o.SchoolId = dorm.GetSchoolId(o.DormId)
-	return o.insert()
+	ok, o.DormId = stu.GetStuDormIdById(o.StuId)
+	ok2, o.SchoolId = dorm.GetSchoolId(o.DormId)
+	return ok && ok2 && o.insert()
 }

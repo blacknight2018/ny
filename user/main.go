@@ -26,7 +26,8 @@ func Register(engine *gin.Engine) {
 		if ok, data := utils.GetRawData(context); ok {
 			openId := gjson.Get(data, "open_id").String()
 			nickName := gjson.Get(data, "nick_name").String()
-			addUser(openId, nickName)
+			avatarUrl := gjson.Get(data, "avatar_url").String()
+			addUser(openId, nickName, avatarUrl)
 			gerr.SetResponse(context, gerr.Ok, nil)
 			return
 		}
@@ -39,11 +40,12 @@ func Register(engine *gin.Engine) {
 			stuNumber := gjson.Get(data, "stu_number").String()
 			stuMobile := gjson.Get(data, "mobile").String()
 			saveMobile(openId, stuMobile)
-			userId := getIdByOpenId(openId)
-			stu.SaveDorm(userId, int(dormId))
-			stu.SaveStuNumber(userId, stuNumber)
-			gerr.SetResponse(context, gerr.Ok, nil)
-			return
+			if ok, userId := getIdByOpenId(openId); ok {
+				stu.SaveDorm(userId, int(dormId))
+				stu.SaveStuNumber(userId, stuNumber)
+				gerr.SetResponse(context, gerr.Ok, nil)
+				return
+			}
 
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)

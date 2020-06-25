@@ -24,7 +24,7 @@ func (d *dorm) Update() bool {
 
 // 根据主键信息填充其他字段
 func (d *dorm) QueryById() bool {
-	err := db.GetDB().Model(d).Where("id = ?", d.Id).First(d)
+	err := db.GetDB().Model(d).Where("id = ?", d.Id).First(d).Error
 	return err == nil
 }
 

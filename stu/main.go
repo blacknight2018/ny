@@ -5,25 +5,22 @@ import (
 	"ny/dorm"
 )
 
-func GetStuDormIdByUserId(userId int) int {
+func GetStuDormIdByUserId(userId int) (bool, int) {
 	var s stu
 	s.UserId = userId
-	s.queryByUserId()
-	return s.DormId
+	return s.queryByUserId(), s.DormId
 }
 
-func GetStuDormIdById(id int) int {
+func GetStuDormIdById(id int) (bool, int) {
 	var s stu
 	s.Id = id
-	s.queryById()
-	return s.DormId
+	return s.queryById(), s.DormId
 }
 
-func GetStuNumber(userId int) string {
+func GetStuNumber(userId int) (bool, string) {
 	var s stu
 	s.UserId = userId
-	s.queryByUserId()
-	return s.StuNumber
+	return s.queryByUserId(), s.StuNumber
 }
 
 func SaveStuNumber(userId int, stuNumber string) bool {
@@ -37,16 +34,17 @@ func SaveStuNumber(userId int, stuNumber string) bool {
 func SaveDorm(userId int, dormId int) bool {
 	var s stu
 	s.UserId = userId
-	s.queryByUserId()
+	r := s.queryByUserId()
 	s.DormId = dormId
-	return s.update()
+	return r && s.update()
 }
 
 func AddStu(userId int) (bool, int) {
 	var s stu
+	var ok1 bool
 	s.UserId = userId
-	s.DormId = dorm.GetFirstDormId()
-	return s.insert(), s.Id
+	ok1, s.DormId = dorm.GetFirstDormId()
+	return ok1 && s.insert(), s.Id
 }
 
 func GetStuExitsByUserId(userId int) bool {
@@ -56,11 +54,11 @@ func GetStuExitsByUserId(userId int) bool {
 	return r
 }
 
-func GetStuIdByUserId(userId int) int {
+func GetStuIdByUserId(userId int) (bool, int) {
 	var s stu
 	s.UserId = userId
-	s.queryByUserId()
-	return s.Id
+
+	return s.queryByUserId(), s.Id
 
 }
 
@@ -68,6 +66,13 @@ func GetStuExitsById(id int) bool {
 	var s stu
 	s.Id = id
 	return s.queryById()
+}
+
+func GetStuRoomByUserId(id int) (bool, string) {
+	var s stu
+	s.UserId = id
+	r := s.queryByUserId()
+	return r, s.DormRoom
 }
 
 func Test() {
