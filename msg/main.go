@@ -6,6 +6,7 @@ import (
 	"github.com/tidwall/gjson"
 	"ny/gerr"
 	"ny/utils"
+	"strconv"
 )
 
 const (
@@ -33,5 +34,20 @@ func Register(engine *gin.Engine) {
 			}
 		}
 		gerr.SetResponse(context, gerr.UnKnow, nil)
+	})
+	g.GET("", func(context *gin.Context) {
+		stuIdA := context.Query("stua_id")
+		stuIdB := context.Query("stub_id")
+		stuIdAInt, err := strconv.Atoi(stuIdA)
+		stuIdBInt, err2 := strconv.Atoi(stuIdB)
+		if err == nil && err2 == nil {
+			fmt.Println(stuIdAInt, stuIdBInt)
+			if ok, data := getStuMsg(int64(stuIdAInt), int64(stuIdBInt), 5); ok {
+				gerr.SetResponse(context, gerr.Ok, &data)
+			}
+			return
+		}
+		gerr.SetResponse(context, gerr.UnKnow, nil)
+
 	})
 }
