@@ -1,6 +1,7 @@
 package msg
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
 	"ny/gerr"
@@ -12,10 +13,11 @@ const (
 )
 
 func Test() {
-	//ok, r := getStuMsg(8, 5)
-	//setMsgRead(8, 23)
-	//ok, r = getStuMsg(8, 5)
-	//fmt.Println(ok, r)
+	ok, r := getStuMsg(9, 8, 5)
+	setMsgRead(9, 22)
+	ok, r = getStuMsg(9, 8, 5)
+	fmt.Println(ok, r)
+
 }
 func Register(engine *gin.Engine) {
 	g := engine.Group("msg")

@@ -22,7 +22,8 @@ func (m *msg) insert() bool {
 	return nil == db.GetDB().Model(m).Create(m).Error
 }
 
-func queryStuMsg(stuId int64, limit int) (bool, []msg) {
+// 获取A和B之间的最新的limit条聊天记录,并且是A没有阅读过的
+func queryStuMsg(stuIdA int64, stuIdB int64, limit int) (bool, []msg) {
 	var m []msg
 	sql := `SELECT
 	*
@@ -30,7 +31,7 @@ FROM
 	msg
 WHERE
 	(
-		sender_stu = ? || recipient_stu = ?
+		(sender_stu = ? && recipient_stu = ?) || (sender_stu = ? && recipient_stu = ?)
 	) && (
 		id NOT IN (
 			SELECT
@@ -41,6 +42,6 @@ WHERE
 				stu_id = ? && is_read = 1
 		)
 	) limit ?`
-	r := db.GetDB().Model(m).Raw(sql, stuId, stuId, stuId, limit).Find(&m).Error == nil
+	r := db.GetDB().Model(m).Raw(sql, stuIdA, stuIdB, stuIdB, stuIdA, stuIdA, limit).Find(&m).Error == nil
 	return r, m
 }

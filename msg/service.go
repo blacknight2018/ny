@@ -9,8 +9,9 @@ func InsertTxtMsg(senderStuId int64, recipientStuId int64, content string) bool 
 	return m.insert()
 }
 
-func getStuMsg(stuId int64, limit int) (bool, []msg) {
-	return queryStuMsg(stuId, limit)
+// 获取A和B之间的最新的limit条聊天记录,并且是A没有阅读过的
+func getStuMsg(stuIdA int64, stuIdB int64, limit int) (bool, []msg) {
+	return queryStuMsg(stuIdA, stuIdB, limit)
 }
 
 func setMsgRead(stuId int64, msgId int64) bool {
