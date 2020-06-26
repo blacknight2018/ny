@@ -5,9 +5,9 @@ import (
 	"ny/utils"
 )
 
-func getDormList(schoolId int) (bool, string) {
+func getDormList(schoolId int64) (bool, string) {
 
-	ok, r := QueryDormList(schoolId)
+	ok, r := queryDormList(schoolId)
 	if ok {
 		bytes, err := json.Marshal(r)
 		if err == nil {
@@ -17,9 +17,9 @@ func getDormList(schoolId int) (bool, string) {
 	return false, utils.EmptyString
 }
 
-func getDormIdList(schoolId int) []int {
-	var idList []int
-	ok, r := QueryDormList(schoolId)
+func getDormIdList(schoolId int64) []int64 {
+	var idList []int64
+	ok, r := queryDormList(schoolId)
 	if ok {
 		for _, v := range r {
 			idList = append(idList, v.Id)

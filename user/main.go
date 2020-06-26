@@ -15,14 +15,14 @@ func GetUserAvatarUrlByOpenId(OpenId string) (bool, string) {
 	return getAvatarUrlByOpenId(OpenId)
 }
 
-func GetOpenIdByUserId(userId int) (bool, string) {
+func GetOpenIdByUserId(userId int64) (bool, string) {
 	return getOpenIdById(userId)
 }
 
-func SendOrderNotify(openId string, templateId string, dormName string, orderId int, comment string) bool {
+func SendOrderNotify(openId string, templateId string, dormName string, orderId int64, comment string) bool {
 	var param = make(map[string]interface{})
 	param["thing2"] = dormName
-	param["character_string3"] = strconv.Itoa(orderId)
+	param["character_string3"] = strconv.Itoa(int(orderId))
 	param["phrase6"] = "已被配送"
 	param["thing7"] = comment
 
@@ -65,9 +65,9 @@ func Register(engine *gin.Engine) {
 			room := gjson.Get(data, "room").String()
 			saveMobile(openId, stuMobile)
 			if ok, userId := getIdByOpenId(openId); ok {
-				ok := stu.SaveDorm(userId, int(dormId))
-				ok2 := stu.SaveStuNumber(userId, stuNumber)
-				ok3 := stu.SaveRoom(userId, room)
+				ok := stu.SaveDorm(int64(userId), dormId)
+				ok2 := stu.SaveStuNumber(int64(userId), stuNumber)
+				ok3 := stu.SaveRoom(int64(userId), room)
 				if ok && ok2 && ok3 {
 					gerr.SetResponse(context, gerr.Ok, nil)
 					return

@@ -3,7 +3,7 @@ package school
 import "ny/db"
 
 type school struct {
-	Id         int    `json:"id";gorm:"column:id;unique_index;PRIMARY_KEY;"`
+	Id         int64  `json:"id";gorm:"column:id;unique_index;PRIMARY_KEY;"`
 	SchoolName string `json:"school_name";gorm:"column:school_name;"`
 }
 

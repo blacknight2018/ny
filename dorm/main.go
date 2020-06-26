@@ -6,23 +6,23 @@ import (
 	"strconv"
 )
 
-func GetDormName(dormId int) (bool, string) {
+func GetDormName(dormId int64) (bool, string) {
 	var d dorm
 	d.Id = dormId
-	r := d.QueryById()
+	r := d.queryById()
 	return r, d.DormName
 }
 
-func GetSchoolId(dormId int) (bool, int) {
+func GetSchoolId(dormId int64) (bool, int64) {
 	var d dorm
 	d.Id = dormId
 
-	return d.QueryById(), d.SchoolId
+	return d.queryById(), d.SchoolId
 }
 
-func GetFirstDormId() (bool, int) {
+func GetFirstDormId() (bool, int64) {
 	var d dorm
-	return d.QueryFirst(), d.Id
+	return d.queryFirst(), d.Id
 }
 
 func Register(engine *gin.Engine) {
@@ -34,7 +34,7 @@ func Register(engine *gin.Engine) {
 			gerr.SetResponse(context, gerr.UnKnow, nil)
 			return
 		}
-		if ok, data := getDormList(schoolIdInt); ok {
+		if ok, data := getDormList(int64(schoolIdInt)); ok {
 			gerr.SetResponse(context, gerr.Ok, &data)
 			return
 		}

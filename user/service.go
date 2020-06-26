@@ -17,11 +17,11 @@ const AppId = "wx53e43951ac45b9a4"
 const AppSecret = "3cd2d8c08ebf9f10ec4abeb34e89b828"
 
 type PersonalInfo struct {
-	SchoolId  int    `json:"school_id"`
-	DormId    int    `json:"dorm_id"`
+	SchoolId  int64  `json:"school_id"`
+	DormId    int64  `json:"dorm_id"`
 	StuNumber string `json:"stu_number"`
 	Mobile    string `json:"mobile"`
-	StuId     int    `json:"stu_id"`
+	StuId     int64  `json:"stu_id"`
 	Room      string `json:"room"`
 }
 
@@ -125,14 +125,14 @@ func getAvatarUrlByOpenId(openId string) (bool, string) {
 	return r, u.AvatarUrl
 }
 
-func getIdByOpenId(openId string) (bool, int) {
+func getIdByOpenId(openId string) (bool, int64) {
 	var u user
 	u.OpenId = openId
 	r := u.queryByOpenId()
 	return r, u.Id
 }
 
-func getOpenIdById(userId int) (bool, string) {
+func getOpenIdById(userId int64) (bool, string) {
 	var u user
 	u.Id = userId
 	r := u.queryById()

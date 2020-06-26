@@ -30,7 +30,7 @@ func Register(engine *gin.Engine) {
 
 			stuId := gjson.Get(data, "stu_id").Int()
 
-			if stu.GetStuExitsById(int(stuId)) == false {
+			if stu.GetStuExitsById(stuId) == false {
 				gerr.SetResponse(context, gerr.UnKnowUser, nil)
 				return
 			}
@@ -41,7 +41,7 @@ func Register(engine *gin.Engine) {
 			orderTemplateId := gjson.Get(data, "template_id").String()
 			fmt.Println(orderType, orderPrice, orderEndTime, orderComment)
 
-			if insertOrder(int(orderType), int(stuId), orderPrice, time.Unix(orderEndTime/1000, 0), orderComment, orderTemplateId) {
+			if insertOrder(int(orderType), stuId, orderPrice, time.Unix(orderEndTime/1000, 0), orderComment, orderTemplateId) {
 				gerr.SetResponse(context, gerr.Ok, nil)
 				return
 			}
@@ -53,7 +53,7 @@ func Register(engine *gin.Engine) {
 		schoolId := context.Param("school_id")
 		schoolIdInt, err := strconv.Atoi(schoolId)
 		if err == nil {
-			if ok, data := getOrderListBySchoolId(schoolIdInt); ok {
+			if ok, data := getOrderListBySchoolId(int64(schoolIdInt)); ok {
 				gerr.SetResponse(context, gerr.Ok, &data)
 				return
 			}
@@ -67,7 +67,7 @@ func Register(engine *gin.Engine) {
 		dormIdInt, err2 := strconv.Atoi(dormId)
 		if err == nil && err2 == nil {
 			//fmt.Println(schoolIdInt, dormIdInt)
-			if ok, data := getOrderListBySchoolIdDormId(schoolIdInt, dormIdInt); ok {
+			if ok, data := getOrderListBySchoolIdDormId(int64(schoolIdInt), int64(dormIdInt)); ok {
 				gerr.SetResponse(context, gerr.Ok, &data)
 				return
 			}
@@ -80,7 +80,7 @@ func Register(engine *gin.Engine) {
 			stuId := gjson.Get(data, "stu_id").Int()
 			openId := gjson.Get(data, "open_id").String()
 			//fmt.Println(orderId, stuId)
-			if ok = finishOrder(openId, int(orderId), int(stuId)); ok {
+			if ok = finishOrder(openId, orderId, stuId); ok {
 				gerr.SetResponse(context, gerr.Ok, nil)
 				return
 			}

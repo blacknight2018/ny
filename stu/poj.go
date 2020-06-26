@@ -5,10 +5,10 @@ import "ny/db"
 //stu
 
 type stu struct {
-	Id        int    `gorm:"column:id;unique_index;PRIMARY_KEY;"`
-	DormId    int    `gorm:"column:dorm_id;"`
+	Id        int64  `gorm:"column:id;unique_index;PRIMARY_KEY;"`
+	DormId    int64  `gorm:"column:dorm_id;"`
 	StuNumber string `gorm:"column:stu_number;"`
-	UserId    int    `gorm:"column:user_id;"`
+	UserId    int64  `gorm:"column:user_id;"`
 	DormRoom  string `gorm:"column:dorm_room;"`
 }
 

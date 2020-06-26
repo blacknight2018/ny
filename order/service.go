@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func getOrderListBySchoolId(schoolId int) (bool, string) {
+func getOrderListBySchoolId(schoolId int64) (bool, string) {
 	if ok, data := queryListBySchoolId(schoolId); ok {
 		if bytes, err := json.Marshal(data); err == nil {
 			return true, string(bytes)
@@ -19,7 +19,7 @@ func getOrderListBySchoolId(schoolId int) (bool, string) {
 	}
 	return false, utils.EmptyString
 }
-func getOrderListBySchoolIdDormId(schoolId int, dormId int) (bool, string) {
+func getOrderListBySchoolIdDormId(schoolId int64, dormId int64) (bool, string) {
 	if ok, data := queryListBySchoolIdDormId(schoolId, dormId); ok {
 		if bytes, err := json.Marshal(data); err == nil {
 			return true, string(bytes)
@@ -28,7 +28,7 @@ func getOrderListBySchoolIdDormId(schoolId int, dormId int) (bool, string) {
 	return false, utils.EmptyString
 }
 
-func finishOrder(openId string, orderId int, stuId int) bool {
+func finishOrder(openId string, orderId int64, stuId int64) bool {
 	var o order
 	o.Id = orderId
 	r := o.queryById()
@@ -54,10 +54,10 @@ func finishOrder(openId string, orderId int, stuId int) bool {
 
 }
 
-func insertOrder(orderType int, stuId int, price string, endTime time.Time, comment string, templateId string) bool {
+func insertOrder(orderType int, stuId int64, price string, endTime time.Time, comment string, templateId string) bool {
 	var o order
 	var ok, ok2, ok3, ok4, ok5 bool
-	var userId int
+	var userId int64
 	var openId string
 	o.Comment = comment
 	o.FinishTime = &endTime
