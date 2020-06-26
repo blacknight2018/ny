@@ -42,7 +42,7 @@ func Register(engine *gin.Engine) {
 		stuIdBInt, err2 := strconv.Atoi(stuIdB)
 		if err == nil && err2 == nil {
 			fmt.Println(stuIdAInt, stuIdBInt)
-			if ok, data := getStuMsg(int64(stuIdAInt), int64(stuIdBInt), 5); ok {
+			if ok, data := getStuMsg(int64(stuIdAInt), int64(stuIdBInt), 10); ok {
 				gerr.SetResponse(context, gerr.Ok, &data)
 			}
 			return

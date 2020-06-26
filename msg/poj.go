@@ -6,12 +6,12 @@ import (
 )
 
 type msg struct {
-	Id             int64      `gorm:"column:id;PRIMARY_KEY;NOT NULL;"`
-	SenderStuId    int64      `gorm:"column:sender_stu;NOT NULL;"`
-	RecipientStuId int64      `gorm:"column:recipient_stu;NOT NULL;"`
-	Content        string     `gorm:"column:content;NOT NULL;"`
-	Type           string     `gorm:"column:type;type:enum('TXT');NOT NULL;"`
-	CreateTime     *time.Time `gorm:"column:create_time;"`
+	Id           int64      `json:"id";gorm:"column:id;PRIMARY_KEY;NOT NULL;"`
+	SenderStu    int64      `json:"sender_stu";gorm:"column:sender_stu;"`
+	RecipientStu int64      `json:"recipient_stu";gorm:"column:recipient_stu;"`
+	Content      string     `json:"content";gorm:"column:content;NOT NULL;"`
+	Type         string     `json:"type";gorm:"column:type;type:enum('TXT');NOT NULL;"`
+	CreateTime   *time.Time `json:"create_time";gorm:"column:create_time;"`
 }
 
 func (m *msg) TableName() string {

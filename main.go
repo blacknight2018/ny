@@ -12,7 +12,6 @@ import (
 
 func main() {
 	g := gin.Default()
-	msg.Test()
 	stu.Test()
 	user.Test()
 	order.Test()
