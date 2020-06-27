@@ -2,7 +2,10 @@ package stu
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"ny/dorm"
+	"ny/gerr"
+	"strconv"
 )
 
 func GetStuDormIdByUserId(userId int64) (bool, int64) {
@@ -90,6 +93,23 @@ func GetStuRoomByUserId(id int64) (bool, string) {
 	return r, s.DormRoom
 }
 
+func Register(engine *gin.Engine) {
+	g := engine.Group("stu")
+	g.GET("", func(context *gin.Context) {
+		stuId := context.Query("stu_id")
+		if stuIdInt, err := strconv.Atoi(stuId); err == nil {
+			if ok, data := getStuDetail(int64(stuIdInt)); ok {
+				gerr.SetResponse(context, gerr.Ok, &data)
+				return
+			}
+		}
+		gerr.SetResponse(context, gerr.UnKnow, nil)
+	})
+}
+
 func Test() {
-	fmt.Println(GetStuExitsById(50))
+	ok, data := queryStuDetailByUserId(63)
+	if ok {
+		fmt.Println(data)
+	}
 }

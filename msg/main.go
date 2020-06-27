@@ -27,6 +27,10 @@ func Register(engine *gin.Engine) {
 			senderStuId := gjson.Get(data, "sender_stuid").Int()
 			recipientStuId := gjson.Get(data, "recipient_stuid").Int()
 			content := gjson.Get(data, "content").String()
+			if len(content) == 0 {
+				gerr.SetResponse(context, gerr.SendNotEmpty, nil)
+				return
+			}
 			//fmt.Println(senderStuId, recipientStuId, content)
 			if ok := InsertTxtMsg(senderStuId, recipientStuId, content); ok {
 				gerr.SetResponse(context, gerr.Ok, nil)

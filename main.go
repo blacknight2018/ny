@@ -12,14 +12,12 @@ import (
 
 func main() {
 	g := gin.Default()
-	stu.Test()
-	user.Test()
-	order.Test()
 	user.Register(g)
 	dorm.Register(g)
 	school.Register(g)
 	order.Register(g)
 	msg.Register(g)
+	stu.Register(g)
 	g.Run(":80")
 
 }
